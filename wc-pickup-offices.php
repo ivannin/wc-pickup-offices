@@ -29,19 +29,24 @@
 if ( ! defined( 'ABSPATH' ) ) 
 	die( '-1' );
 
-/**
- * Определения плагина
- */
+
+// Определения плагина
 define( 'WCPO_TEXT_DOMAIN', 'wc-pickup-offices' );		// Текстовый домен
 define( 'WCPO_PATH', plugin_dir_path( __FILE__ ) );		// Путь к папке плагина
 define( 'WCPO_URL', plugin_dir_url( __FILE__ ) );		// URL к папке плагина
 
+// Классы плагина
+require( WCPO_PATH . 'classes/wcpo_officelist.php' );
+require( WCPO_PATH . 'classes/wcpo_manager.php' );
 
-/**
- * Локализация плагина
- */
+
+// Инициализация плагина
 add_action( 'init', 'wcpo_load_textdomain' );
 function wcpo_load_textdomain() 
 {
-	load_plugin_textdomain( WCPO_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' ); 
-}
+	// Локализация плагина
+	load_plugin_textdomain( WCPO_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
+	
+	// Инициализация плагина
+	new WCPO_Manager( WCPO_PATH, WCPO_URL );	
+}		

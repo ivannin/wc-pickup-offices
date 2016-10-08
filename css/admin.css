@@ -1,0 +1,15 @@
+/**
+ * Стили для админки
+ */
+
+/* Метабокс */
+#wcpo-metabox input[type='text'],
+#wcpo-metabox textarea
+{
+	width: 100%;
+}
+
+#wcpo-metabox textarea
+{
+	height: 6em;
+}
