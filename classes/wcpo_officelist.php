@@ -4,6 +4,12 @@
  */
 class WCPO_OfficeList
 {
+		
+	/**
+	 * Табличный редактор пунктов самовывоза
+	 * @var WCPO_OfficeTable
+	 */
+	protected $officeTable;
 	
 	/**
 	 * Конструктор класса
@@ -27,7 +33,20 @@ class WCPO_OfficeList
 			// Таблица в админке
 			add_filter('manage_' . self::CPT . '_posts_columns', 		array( $this, 'getPostColumnsList' ) );
 			add_action('manage_' . self::CPT . '_posts_custom_column', 	array( $this, 'showColumnValue' ), 10, 2 );
-
+			add_filter( 'request', array( $this, 'sortByColumn' ) );	// Сортировка в админке
+			
+			// Табличный редактор пунктов
+			add_submenu_page( 
+				'edit.php?post_type=' . self::CPT, 
+				__( 'Pickup Office Table', WCPO_TEXT_DOMAIN ), 
+				__( 'Edit In Table', WCPO_TEXT_DOMAIN ), 
+				'manage_options', 
+				'pickup_office_table', 
+				array( $this, 'renderTablePage') 
+			);
+			
+			$this->officeTable = new WCPO_OfficeTable( $this );
+			
 			
 		}		
 	}
@@ -249,9 +268,9 @@ class WCPO_OfficeList
 		
 		/* wcpo_open_hours			Время работы */
 		echo '	<tr>';
-		echo '		<th><label for="wcpo_open_hours" class="wcpo_open_hours_label">' . __( 'Open hours', WCPO_TEXT_DOMAIN ) . '</label></th>';
+		echo '		<th><label for="wcpo_open_hours" class="wcpo_open_hours_label">' . __( 'Open Hours', WCPO_TEXT_DOMAIN ) . '</label></th>';
 		echo '		<td>';
-		echo '			<textarea id="wcpo_open_hours" name="wcpo_open_hours" class="wcpo_open_hours_field" placeholder="' . esc_attr__( 'Open hours', WCPO_TEXT_DOMAIN ) . '">' . esc_attr__( $wcpo_open_hours ) . '</textarea>';
+		echo '			<textarea id="wcpo_open_hours" name="wcpo_open_hours" class="wcpo_open_hours_field" placeholder="' . esc_attr__( 'Open Hours', WCPO_TEXT_DOMAIN ) . '">' . esc_attr__( $wcpo_open_hours ) . '</textarea>';
 		echo '			<p class="description">' . __( 'Open hours of pickup offce', WCPO_TEXT_DOMAIN ) . '</p>';
 		echo '		</td>';
 		echo '	</tr>';
@@ -285,10 +304,10 @@ class WCPO_OfficeList
 		
 		/* wcpo_max_weight			Ограничение по весу */
 		echo '	<tr>';
-		echo '		<th><label for="wcpo_max_weight" class="wcpo_max_weight_label">' . __( 'Max. Wheight', WCPO_TEXT_DOMAIN ) . '</label></th>';
+		echo '		<th><label for="wcpo_max_weight" class="wcpo_max_weight_label">' . __( 'Max. Weight', WCPO_TEXT_DOMAIN ) . '</label></th>';
 		echo '		<td>';
-		echo '			<input type="text" id="wcpo_max_weight" name="wcpo_max_weight" class="wcpo_max_weight_field" placeholder="' . esc_attr__( 'Max. Wheight', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_max_weight ) . '">';
-		echo '			<p class="description">' . __( 'Max. Wheight Limit', WCPO_TEXT_DOMAIN ) . '</p>';
+		echo '			<input type="text" id="wcpo_max_weight" name="wcpo_max_weight" class="wcpo_max_weight_field" placeholder="' . esc_attr__( 'Max. Weight', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_max_weight ) . '">';
+		echo '			<p class="description">' . __( 'Max. Weight Limit', WCPO_TEXT_DOMAIN ) . '</p>';
 		echo '		</td>';
 		echo '	</tr>';			
 		
@@ -385,7 +404,39 @@ class WCPO_OfficeList
 				echo get_post_meta( $post_id , 'wcpo_address' , true ); 
 				break;
 		}
+	}
+
+	/**
+	 * Сортировка в колонке 
+	 * @param ьшчув $vars	Код колонки
+	 * @param string $post_id	ID записи
+	 * @retun mixed
+	 */	
+	function sortByColumn( $vars ) {
+		if ( isset( $vars['post_type'] ) && $vars['post_type'] == self::CPT )
+		{
+			// Если сортировка не установлена
+			if ( ! isset( $vars['orderby'] ) ) 
+			{
+				$vars = array_merge( $vars, array(
+				'meta_key' => 'wcpo_city',
+				'orderby' => 'meta_value',
+				'order' => 'asc' // don't use this; blocks toggle UI
+				) );
+			}
+		}
+		return $vars;
 	}	
+
+	/* -------------- Табличный редактор пунктов самовывоза -------------- */
+	/**
+	 * Установка колонок в таблице 
+	 */
+	public function renderTablePage ( ) 
+	{
+		echo '<h1>', __( 'Pickup Office List', WCPO_TEXT_DOMAIN ), '</h1>';
+		echo $this->officeTable;
+	}
 	
 	
 	/* -------------- Операции с данными -------------- */
@@ -401,7 +452,30 @@ class WCPO_OfficeList
 		return $values;
 	}	
 	
-	
+	/**
+	 * Возвращает список типов офисов
+	 * @retun mixed
+	 */
+	public function getOfficeTypes() 
+	{
+		// Типы офисов	
+		$offceTypes = array();
+		
+		// The Term Query
+		$term_query = new WP_Term_Query( array (
+		'taxonomy'	=> array( self::OFFICE_TYPE ),
+		'fields'    => 'id=>name',
+		'get'		=> 'all',
+		));
+		
+		// The Loop
+		if ( ! empty( $term_query ) && ! is_wp_error( $term_query ) ) 
+		{
+			$offceTypes = $term_query->terms;
+		}
+		
+		return $offceTypes;
+	}	
 	
 	
 	

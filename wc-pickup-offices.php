@@ -25,28 +25,48 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-// Напрямую не вызываем!
+// РќР°РїСЂСЏРјСѓСЋ РЅРµ РІС‹Р·С‹РІР°РµРј!
 if ( ! defined( 'ABSPATH' ) ) 
 	die( '-1' );
 
 
-// Определения плагина
-define( 'WCPO_TEXT_DOMAIN', 'wc-pickup-offices' );		// Текстовый домен
-define( 'WCPO_PATH', plugin_dir_path( __FILE__ ) );		// Путь к папке плагина
-define( 'WCPO_URL', plugin_dir_url( __FILE__ ) );		// URL к папке плагина
+// РћРїСЂРµРґРµР»РµРЅРёСЏ РїР»Р°РіРёРЅР°
+define( 'WCPO_TEXT_DOMAIN', 'wc-pickup-offices' );		// РўРµРєСЃС‚РѕРІС‹Р№ РґРѕРјРµРЅ
+define( 'WCPO_PATH', plugin_dir_path( __FILE__ ) );		// РџСѓС‚СЊ Рє РїР°РїРєРµ РїР»Р°РіРёРЅР°
+define( 'WCPO_URL', plugin_dir_url( __FILE__ ) );		// URL Рє РїР°РїРєРµ РїР»Р°РіРёРЅР°
 
-// Классы плагина
-require( WCPO_PATH . 'classes/wcpo_officelist.php' );
-require( WCPO_PATH . 'classes/wcpo_manager.php' );
-
-
-// Инициализация плагина
-add_action( 'init', 'wcpo_load_textdomain' );
-function wcpo_load_textdomain() 
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїР»Р°РіРёРЅР°
+add_action( 'init', 'wcpo_init' );
+function wcpo_init() 
 {
-	// Локализация плагина
-	load_plugin_textdomain( WCPO_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );
-	
-	// Инициализация плагина
-	new WCPO_Manager( WCPO_PATH, WCPO_URL );	
-}		
+	// Р›РѕРєР°Р»РёР·Р°С†РёСЏ РїР»Р°РіРёРЅР°
+	load_plugin_textdomain( WCPO_TEXT_DOMAIN, false, dirname( plugin_basename( __FILE__ ) ) . '/lang' );		
+		
+	// РџСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РїР»Р°РіРёРЅР° wp-handsontable-core
+	if ( defined( 'WP_HOT_CORE_VERSION' )) 
+	{
+		// РљР»Р°СЃСЃС‹ РїР»Р°РіРёРЅР°
+		require( WCPO_PATH . 'classes/wcpo_officelist.php' );
+		require( WCPO_PATH . 'classes/wcpo_manager.php' );
+		require( WCPO_PATH . 'classes/wcpo_officetable.php' );
+		
+			
+		// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїР»Р°РіРёРЅР°
+		new WCPO_Manager( WCPO_PATH, WCPO_URL );	
+	}
+	else
+	{
+		// РџСЂРµРґСѓРїСЂРµР¶РґР°СЋС‰Р°СЏ РЅР°РґРїРёСЃСЊ Рё РґРµР°РєС‚РёРІРёСЂСѓРµРј РїР»Р°РіРёРЅ
+		add_action( 'admin_notices', 'wcpo_wp_hot_core_missing' );
+		deactivate_plugins( plugin_basename( __FILE__ ) );		
+	}
+}
+
+// РџСЂРµРґСѓРїСЂРµР¶РґР°СЋС‰Р°СЏ РЅР°РґРїРёСЃСЊ
+function wcpo_wp_hot_core_missing() 
+{
+	$class = 'notice notice-error';
+	$message = __( 'To use this plugin must be installed and activated <strong>wp-handsontable-core</strong>!<br/>
+		<a href="https://github.com/ivannin/wp-handsontable-core" target="_blank">https://github.com/ivannin/wp-handsontable-core</a>', WCPO_TEXT_DOMAIN );
+	printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message ); 
+}	
