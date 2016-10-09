@@ -21,12 +21,13 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		// Сохраним класс списка
 		$this->officeList = $officeList;
 		
-        // Обработчик, который формирует список пунктов самовывоза
+        // Обработчик, который формирует список пунктов самовывоза для предзагрузки
 		$this->loadHandler = 'WCPO_OfficeTable::getOffices';
 		
 		// AJAX обработчики
-		add_action( 'wp_ajax_load_' . $this->ajaxAction, 'WCPO_OfficeTable::ajaxGetOffices' );	
-		add_action( 'wp_ajax_save_' . $this->ajaxAction, 'WCPO_OfficeTable::ajaxSaveOffices' );	
+		add_action( 'wp_ajax_load_' 	. $this->ajaxAction, 'WCPO_OfficeTable::ajaxGetOffices' );	
+		add_action( 'wp_ajax_save_' 	. $this->ajaxAction, 'WCPO_OfficeTable::ajaxSaveOffices' );
+		add_action( 'wp_ajax_delete_' 	. $this->ajaxAction, 'WCPO_OfficeTable::ajaxDeleteOffices' );
     }
 	
     /**
@@ -41,6 +42,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		$wcpo_point_id 			= __( 'Point ID', WCPO_TEXT_DOMAIN );
 		$wcpo_city 				= __( 'City', WCPO_TEXT_DOMAIN );
 		$wcpo_delivery_period 	= __( 'Delivery Period', WCPO_TEXT_DOMAIN );
+		$wcpo_metro				= __( 'Subway', WCPO_TEXT_DOMAIN );
 		$wcpo_zip 				= __( 'Zip', WCPO_TEXT_DOMAIN );
 		$wcpo_address 			= __( 'Address', WCPO_TEXT_DOMAIN );
 		$wcpo_open_hours		= __( 'Open Hours', WCPO_TEXT_DOMAIN );
@@ -49,15 +51,19 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		$wcpo_terminal			= __( 'Terminal', WCPO_TEXT_DOMAIN );
 		$wcpo_max_weight		= __( 'Max. Weight', WCPO_TEXT_DOMAIN );
 		
+		// Название пунктов меню
+		$menu_insertBelow		= __( 'Insert below', WCPO_TEXT_DOMAIN );
+		$menu_delete_row		= __( 'Delete row', WCPO_TEXT_DOMAIN );
 		
 		return "{
 			minSpareRows: 1,
-			colHeaders: ['$wcpo_id', '$wcpo_city', '$wcpo_point_id', '$wcpo_delivery_period', '$wcpo_zip', '$wcpo_address', '$wcpo_open_hours', '$wcpo_phone', '$wcpo_email', '$wcpo_terminal', '$wcpo_max_weight'],
+			colHeaders: ['$wcpo_id', '$wcpo_city', '$wcpo_point_id', '$wcpo_delivery_period', '$wcpo_metro', '$wcpo_zip', '$wcpo_address', '$wcpo_open_hours', '$wcpo_phone', '$wcpo_email', '$wcpo_terminal', '$wcpo_max_weight'],
 			columns: [
 			{ data: 'id', 					type: 'numeric', 	readOnly: true },
 			{ data: 'wcpo_city',			type: 'text' },			
 			{ data: 'wcpo_point_id',		type: 'text' },		
 			{ data: 'wcpo_delivery_period',	type: 'text' },
+			{ data: 'wcpo_metro',			type: 'text' },
 			{ data: 'wcpo_zip',				type: 'text' },
 			{ data: 'wcpo_address',			type: 'text' },
 			{ data: 'wcpo_open_hours',		type: 'text' },
@@ -68,8 +74,14 @@ class WCPO_OfficeTable extends WP_HOT_Core
 			],
 			stretchH: 'all',
 			rowHeaders: true,
-			contextMenu: true,
-			search: true
+			contextMenu: {
+				items:{
+					row_below:	{name:'$menu_insertBelow'},
+					remove_row:	{name:'$menu_delete_row'}
+				}
+			},
+			search: true,
+			beforeRemoveRow: deleteRowCallback
 		}";
     }
 
@@ -80,6 +92,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
      */        
     protected function getHtmlControls()
     {
+		// Переключатель типов пунктов
 		$officeTypes = $this->officeList->getOfficeTypes();
 		$officeTypesHTML = '<select id="office_type" class="office_type_select"><option value="0">' . __( 'All Office Types', WCPO_TEXT_DOMAIN ) . '</option>';
 		foreach ($officeTypes as $officeTypeID => $officeTypeName)
@@ -88,7 +101,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 			
         return
 			$this->getHtmlSearch()      . ' | ' .		// Строка поиска
-			$officeTypesHTML . 
+			$officeTypesHTML . 							// Переключатель типов пунктов
 			$this->getHtmlLoadButton()  . ' ' . 		// Кнопка загрузить
 			$this->getHtmlSaveButton();					// Кнопка сохранить
     }	
@@ -100,13 +113,14 @@ class WCPO_OfficeTable extends WP_HOT_Core
      */        
     protected function getJsHandlers()
     {
-		$js = parent::getJsHandlers() . PHP_EOL .
+		$js = "var deleteAction = 'delete_{$this->ajaxAction}';" . PHP_EOL . // Название нового обработчика
+			parent::getJsHandlers() . PHP_EOL .
 			file_get_contents(WCPO_PATH . 'js/admin-post-type-select.js') . PHP_EOL .
 			file_get_contents(WCPO_PATH . 'js/admin-ajax-load.js') . PHP_EOL .
-			file_get_contents(WCPO_PATH . 'js/admin-ajax-save.js');
+			file_get_contents(WCPO_PATH . 'js/admin-ajax-save.js') . PHP_EOL .
+			file_get_contents(WCPO_PATH . 'js/admin-ajax-delete.js');
 		return $js;
 	}
-	
 	
 	/** 
 	 * Получение списка пунктов
@@ -120,7 +134,8 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		$args = array (
 			'post_type'		=> array( 'pickup_office' ),
 			'post_status'	=> array( 'publish' ),
-			'orderby'		=> 'ID',
+			'meta_key' 		=> 'wcpo_city',
+			'orderby'		=> 'meta_value',
 			'order'			=> 'ASC',			
 			'posts_per_page'=> -1,			
 		);
@@ -150,6 +165,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 					'wcpo_point_id'			=> get_the_title(),
 					'wcpo_city'				=> get_post_meta( $post_id, 'wcpo_city', true ),
 					'wcpo_delivery_period'	=> get_post_meta( $post_id, 'wcpo_delivery_period', true ),
+					'wcpo_metro'			=> get_post_meta( $post_id, 'wcpo_metro', true ),
 					'wcpo_zip'				=> get_post_meta( $post_id, 'wcpo_zip', true ),
 					'wcpo_address'			=> get_post_meta( $post_id, 'wcpo_address', true ),
 					'wcpo_open_hours'		=> get_post_meta( $post_id, 'wcpo_open_hours', true ),
@@ -226,6 +242,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 				// Обновляем мету
 				update_post_meta( $office->id, 'wcpo_city', 			$office->wcpo_city );
 				update_post_meta( $office->id, 'wcpo_delivery_period',  $office->wcpo_delivery_period );
+				update_post_meta( $office->id, 'wcpo_metro', 			$office->wcpo_metro );		
 				update_post_meta( $office->id, 'wcpo_zip', 				$office->wcpo_zip );		
 				update_post_meta( $office->id, 'wcpo_address', 			$office->wcpo_address );
 				update_post_meta( $office->id, 'wcpo_open_hours', 		$office->wcpo_open_hours );
@@ -241,6 +258,22 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		wp_die();
 	}	
 	
-	
+	/** 
+	 * Ответ на запрос AJAX deleteData
+	 * Метод статичный, потому что вызывается Аяксом
+	 */
+    public static function ajaxDeleteOffices() 
+    {
+		// массив ID на удаление
+		$ids = isset( $_POST['ids'] ) ? json_decode( wp_unslash( $_POST['ids'] ) ) : array();
+		
+		// Удаляем записи 
+		foreach ($ids as $id)
+		{
+			wp_delete_post( $id, true );
+		}
+		echo json_encode(true);
+		wp_die();
+	}
 	
 }

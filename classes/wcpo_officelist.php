@@ -197,6 +197,7 @@ class WCPO_OfficeList
 		// Retrieve an existing value from the database.
 		$wcpo_city 				= get_post_meta( $post->ID, 'wcpo_city', true );
 		$wcpo_delivery_period 	= get_post_meta( $post->ID, 'wcpo_delivery_period', true );
+		$wcpo_metro				= get_post_meta( $post->ID, 'wcpo_metro', true );
 		$wcpo_zip 				= get_post_meta( $post->ID, 'wcpo_zip', true );
 		$wcpo_address 			= get_post_meta( $post->ID, 'wcpo_address', true );
 		$wcpo_open_hours 		= get_post_meta( $post->ID, 'wcpo_open_hours', true );
@@ -208,6 +209,7 @@ class WCPO_OfficeList
 		// Set default values.
 		if( empty( $wcpo_city ) ) 				$wcpo_city = '';
 		if( empty( $wcpo_delivery_period ) ) 	$wcpo_delivery_period = '';
+		if( empty( $wcpo_metro ) ) 				$wcpo_metro = '';
 		if( empty( $wcpo_zip ) ) 				$wcpo_zip = '';
 		if( empty( $wcpo_address ) ) 			$wcpo_address = '';
 		if( empty( $wcpo_open_hours ) ) 		$wcpo_open_hours = '';
@@ -220,6 +222,7 @@ class WCPO_OfficeList
 		 *	title					Код пункта самовывоза из базы поставщика услуг 
 		 *	wcpo_city				Город 
 		 * 	wcpo_delivery_period	Срок доставки
+		 * 	wcpo_metro				Метро
 		 * 	wcpo_zip				Индекс
 		 * 	wcpo_address			Адрес
 		 * 	wcpo_open_hours			Время работы
@@ -246,13 +249,22 @@ class WCPO_OfficeList
 		echo '			<input type="text" id="wcpo_delivery_period" name="wcpo_delivery_period" class="wcpo_delivery_period_field" placeholder="' . esc_attr__( 'Estimated Delivery Period', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_delivery_period ) . '">';
 		echo '			<p class="description">' . __( 'Estimated Delivery Period to this pickup office', WCPO_TEXT_DOMAIN ) . '</p>';
 		echo '		</td>';
-		echo '	</tr>';		
+		echo '	</tr>';	
+
+		/* wcpo_metro				Метро */
+		echo '	<tr>';
+		echo '		<th><label for="wcpo_metro" class="wcpo_metro_label">' . __( 'Subway', WCPO_TEXT_DOMAIN ) . '</label></th>';
+		echo '		<td>';
+		echo '			<input type="text" id="wcpo_metro" name="wcpo_metro" class="wcpo_metro_field" placeholder="' . esc_attr__( 'Subway station', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_metro ) . '">';
+		echo '			<p class="description">' . __( 'The nearest subway station', WCPO_TEXT_DOMAIN ) . '</p>';
+		echo '		</td>';
+		echo '	</tr>';			
 		
 		/* wcpo_zip				Индекс */
 		echo '	<tr>';
 		echo '		<th><label for="wcpo_zip" class="wcpo_zip_label">' . __( 'Zip', WCPO_TEXT_DOMAIN ) . '</label></th>';
 		echo '		<td>';
-		echo '			<input type="text" id="wcpo_zip" name="wcpo_zip" class="wcpo_zip_field" placeholder="' . esc_attr__( '', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_zip ) . '">';
+		echo '			<input type="text" id="wcpo_zip" name="wcpo_zip" class="wcpo_zip_field" placeholder="' . esc_attr__( 'Zip', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_zip ) . '">';
 		echo '			<p class="description">' . __( 'The zip of pickup office', WCPO_TEXT_DOMAIN ) . '</p>';
 		echo '		</td>';
 		echo '	</tr>';		
@@ -347,6 +359,7 @@ class WCPO_OfficeList
 		// Sanitize user input.
 		$wcpo_new_city = isset( $_POST[ 'wcpo_city' ] ) ? sanitize_text_field( $_POST[ 'wcpo_city' ] ) : '';
 		$wcpo_new_delivery_period = isset( $_POST[ 'wcpo_delivery_period' ] ) ? sanitize_text_field( $_POST[ 'wcpo_delivery_period' ] ) : '';
+		$wcpo_new_metro = isset( $_POST[ 'wcpo_metro' ] ) ? sanitize_text_field( $_POST[ 'wcpo_metro' ] ) : '';		
 		$wcpo_new_zip = isset( $_POST[ 'wcpo_zip' ] ) ? sanitize_text_field( $_POST[ 'wcpo_zip' ] ) : '';		
 		$wcpo_new_address = isset( $_POST[ 'wcpo_address' ] ) ? sanitize_text_field( $_POST[ 'wcpo_address' ] ) : '';
 		$wcpo_new_open_hours = isset( $_POST[ 'wcpo_open_hours' ] ) ? implode( "\n", array_map( 'sanitize_text_field', explode( "\n", $_POST['wcpo_open_hours'] ) ) ) : '';
@@ -358,6 +371,7 @@ class WCPO_OfficeList
 		// Update the meta field in the database.
 		update_post_meta( $post_id, 'wcpo_city', 			$wcpo_new_city );
 		update_post_meta( $post_id, 'wcpo_delivery_period', $wcpo_new_delivery_period );
+		update_post_meta( $post_id, 'wcpo_metro', 			$wcpo_new_metro );		
 		update_post_meta( $post_id, 'wcpo_zip', 			$wcpo_new_zip );		
 		update_post_meta( $post_id, 'wcpo_address', 		$wcpo_new_address );
 		update_post_meta( $post_id, 'wcpo_open_hours', 		$wcpo_new_open_hours );
@@ -377,6 +391,7 @@ class WCPO_OfficeList
 	{
 		 $columns['title'] 			= __( 'Pickup Office ID', 	WCPO_TEXT_DOMAIN );
 		 $columns['wcpo_city'] 		= __( 'City', 				WCPO_TEXT_DOMAIN );
+		 $columns['wcpo_metro'] 	= __( 'Subway',				WCPO_TEXT_DOMAIN );
 		 $columns['wcpo_zip'] 		= __( 'Zip', 				WCPO_TEXT_DOMAIN );
 		 $columns['wcpo_address'] 	= __( 'Address', 			WCPO_TEXT_DOMAIN );
 		 return $columns;
@@ -395,6 +410,10 @@ class WCPO_OfficeList
 			case 'wcpo_city' :
 				echo get_post_meta( $post_id , 'wcpo_city' , true ); 
 				break;
+				
+			case 'wcpo_metro' :
+				echo get_post_meta( $post_id , 'wcpo_metro' , true ); 
+				break;				
 			
 			case 'wcpo_zip' :
 				echo get_post_meta( $post_id , 'wcpo_zip' , true ); 
