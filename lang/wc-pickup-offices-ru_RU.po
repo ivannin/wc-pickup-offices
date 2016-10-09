@@ -1,0 +1,373 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Woocommerce Pickup Offices\n"
+"POT-Creation-Date: 2016-10-09 07:53+0300\n"
+"PO-Revision-Date: 2016-10-09 07:59+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.8.9\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: wc-pickup-offices.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: classes/wcpo_officelist.php:41
+msgid "Pickup Office Table"
+msgstr "Таблица пунктов доставки"
+
+#: classes/wcpo_officelist.php:42
+msgid "Edit In Table"
+msgstr "Редактировать в таблице"
+
+#: classes/wcpo_officelist.php:66
+msgctxt "Post Type General Name"
+msgid "Pickup Offices"
+msgstr "Пункты самовывза"
+
+#: classes/wcpo_officelist.php:67
+msgctxt "Post Type Singular Name"
+msgid "Pickup Office"
+msgstr "Пункт самовывоза"
+
+#: classes/wcpo_officelist.php:68 classes/wcpo_officelist.php:69
+#: classes/wcpo_officelist.php:456
+msgid "Pickup Office List"
+msgstr "Список пунктов самовывоза"
+
+#: classes/wcpo_officelist.php:70
+msgid "Pickup Offices Archives"
+msgstr "Архив пунктов самовывоза"
+
+#: classes/wcpo_officelist.php:71
+msgid "Parent Office:"
+msgstr "Родительский пункт:"
+
+#: classes/wcpo_officelist.php:72
+msgid "All Offices"
+msgstr "Все пункты"
+
+#: classes/wcpo_officelist.php:73
+msgid "Add New Office"
+msgstr "Добавить новый пункт"
+
+#: classes/wcpo_officelist.php:74
+msgid "Add Office"
+msgstr "Добавление пункта"
+
+#: classes/wcpo_officelist.php:75
+msgid "New Office"
+msgstr "Новый пункт"
+
+#: classes/wcpo_officelist.php:76
+msgid "Edit Office"
+msgstr "Редактировать пункт"
+
+#: classes/wcpo_officelist.php:77
+msgid "Update Office"
+msgstr "Обновить пункт"
+
+#: classes/wcpo_officelist.php:78
+msgid "View Office"
+msgstr "Просмотр пункта"
+
+#: classes/wcpo_officelist.php:79
+msgid "Search Office"
+msgstr "Поиск пунктов"
+
+#: classes/wcpo_officelist.php:80
+msgid "Not found"
+msgstr "Не найдено"
+
+#: classes/wcpo_officelist.php:81
+msgid "Not found in Trash"
+msgstr "Не найдено в корзине"
+
+#: classes/wcpo_officelist.php:82
+msgid "Featured Image"
+msgstr "Основное изображение"
+
+#: classes/wcpo_officelist.php:83
+msgid "Set featured image"
+msgstr "Установить изображение"
+
+#: classes/wcpo_officelist.php:84
+msgid "Remove featured image"
+msgstr "Удалить изображение"
+
+#: classes/wcpo_officelist.php:85
+msgid "Use as featured image"
+msgstr "Использовать в качестве миниатюры"
+
+#: classes/wcpo_officelist.php:86
+msgid "Insert into office"
+msgstr "Вставить в пункт"
+
+#: classes/wcpo_officelist.php:87
+msgid "Uploaded to this office"
+msgstr "Загруженные на этого пункта"
+
+#: classes/wcpo_officelist.php:88
+msgid "Offices list"
+msgstr "Список пунктов самовывоза"
+
+#: classes/wcpo_officelist.php:89
+msgid "Offices list navigation"
+msgstr "Навигация по списку"
+
+#: classes/wcpo_officelist.php:90
+msgid "Filter office list"
+msgstr "Фильтр пунктов"
+
+#: classes/wcpo_officelist.php:94
+msgid "Pickup Office"
+msgstr "Пункт самовыоза"
+
+#: classes/wcpo_officelist.php:95
+msgid "Pickup Offices List"
+msgstr "Список пунктов самовывоза"
+
+#: classes/wcpo_officelist.php:128
+msgctxt "Taxonomy General Name"
+msgid "Pickup Office Types"
+msgstr "Тип пунктов"
+
+#: classes/wcpo_officelist.php:129
+msgctxt "Taxonomy Singular Name"
+msgid "Pickup Office Type"
+msgstr "Типы пунктов"
+
+#: classes/wcpo_officelist.php:130
+msgid "Pickup Office Type"
+msgstr "Тип пункта"
+
+#: classes/wcpo_officelist.php:131 classes/wcpo_officetable.php:97
+msgid "All Office Types"
+msgstr "Все типы пунктов"
+
+#: classes/wcpo_officelist.php:132
+msgid "Parent Office Type"
+msgstr "Родительский тип пкнкта"
+
+#: classes/wcpo_officelist.php:133
+msgid "Parent Office Type:"
+msgstr "Родительский тип пункта:"
+
+#: classes/wcpo_officelist.php:134
+msgid "New Office Type"
+msgstr "Новый тип пункта"
+
+#: classes/wcpo_officelist.php:135
+msgid "Add Office Type"
+msgstr "Добавить тип пункта"
+
+#: classes/wcpo_officelist.php:136
+msgid "Edit Office Type"
+msgstr "Изменить тип пункта"
+
+#: classes/wcpo_officelist.php:137
+msgid "Update Office Type"
+msgstr "Обновить тип пункта"
+
+#: classes/wcpo_officelist.php:138
+msgid "View Office Type"
+msgstr "Просмотр типа пункта"
+
+#: classes/wcpo_officelist.php:139
+msgid "Separate types with commas"
+msgstr "Типы пунктов, разделенные запятыми"
+
+#: classes/wcpo_officelist.php:140
+msgid "Add or remove types"
+msgstr "Добавить или удалить типы пунктов"
+
+#: classes/wcpo_officelist.php:141
+msgid "Choose from the most used"
+msgstr "Выбрать из часто используемых"
+
+#: classes/wcpo_officelist.php:142
+msgid "Popular types"
+msgstr "Популярные типы"
+
+#: classes/wcpo_officelist.php:143
+msgid "Search Office Types"
+msgstr "Поиск типов"
+
+#: classes/wcpo_officelist.php:144
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: classes/wcpo_officelist.php:145
+msgid "No Office Types"
+msgstr "Нет типов пунктов"
+
+#: classes/wcpo_officelist.php:146
+msgid "Office Type List"
+msgstr "Список типов пункта"
+
+#: classes/wcpo_officelist.php:147
+msgid "Office Type List navigation"
+msgstr "Навигация по списку типов"
+
+#: classes/wcpo_officelist.php:181
+msgid "Pickup Office Properties"
+msgstr "Свойства пункта"
+
+#: classes/wcpo_officelist.php:238 classes/wcpo_officelist.php:240
+#: classes/wcpo_officelist.php:393 classes/wcpo_officetable.php:43
+msgid "City"
+msgstr "Город"
+
+#: classes/wcpo_officelist.php:241
+msgid "The city of pickup office"
+msgstr "Город пункта самовывоза"
+
+#: classes/wcpo_officelist.php:247 classes/wcpo_officelist.php:249
+msgid "Estimated Delivery Period"
+msgstr "Срок доставки"
+
+#: classes/wcpo_officelist.php:250
+msgid "Estimated Delivery Period to this pickup office"
+msgstr "Предполагаемый срок доставки в этот пункт"
+
+#: classes/wcpo_officelist.php:256 classes/wcpo_officelist.php:394
+#: classes/wcpo_officetable.php:45
+msgid "Subway"
+msgstr "Метро"
+
+#: classes/wcpo_officelist.php:258
+msgid "Subway station"
+msgstr "Станция метро"
+
+#: classes/wcpo_officelist.php:259
+msgid "The nearest subway station"
+msgstr "Ближайшая станция метро"
+
+#: classes/wcpo_officelist.php:265 classes/wcpo_officelist.php:267
+#: classes/wcpo_officelist.php:395 classes/wcpo_officetable.php:46
+msgid "Zip"
+msgstr "Индекс"
+
+#: classes/wcpo_officelist.php:268
+msgid "The zip of pickup office"
+msgstr "Почтовый индекс"
+
+#: classes/wcpo_officelist.php:274 classes/wcpo_officelist.php:276
+#: classes/wcpo_officelist.php:396 classes/wcpo_officetable.php:47
+msgid "Address"
+msgstr "Адрес"
+
+#: classes/wcpo_officelist.php:277
+msgid "The address of pickup office"
+msgstr "Адрес пункта самовывоза"
+
+#: classes/wcpo_officelist.php:283 classes/wcpo_officelist.php:285
+#: classes/wcpo_officetable.php:48
+msgid "Open Hours"
+msgstr "Время работы"
+
+#: classes/wcpo_officelist.php:286
+msgid "Open hours of pickup offce"
+msgstr "Время работы пункта"
+
+#: classes/wcpo_officelist.php:292 classes/wcpo_officelist.php:294
+#: classes/wcpo_officetable.php:49
+msgid "Phone"
+msgstr "Телефон"
+
+#: classes/wcpo_officelist.php:295
+msgid "The phone of pickup office"
+msgstr "Телефон пункта самовывоза"
+
+#: classes/wcpo_officelist.php:301 classes/wcpo_officelist.php:303
+#: classes/wcpo_officetable.php:50
+msgid "E-mail"
+msgstr "E-mail"
+
+#: classes/wcpo_officelist.php:304
+msgid "The e-mail of pickup office"
+msgstr "E-mail ответственного за этот пункт"
+
+#: classes/wcpo_officelist.php:310 classes/wcpo_officetable.php:51
+msgid "Terminal"
+msgstr "Терминал"
+
+#: classes/wcpo_officelist.php:313
+msgid "Terminal is available"
+msgstr "Терминал в наличии"
+
+#: classes/wcpo_officelist.php:319 classes/wcpo_officelist.php:321
+#: classes/wcpo_officetable.php:52
+msgid "Max. Weight"
+msgstr "Максимальный вес"
+
+#: classes/wcpo_officelist.php:322
+msgid "Max. Weight Limit"
+msgstr "Ограничение по весу"
+
+#: classes/wcpo_officelist.php:392
+msgid "Pickup Office ID"
+msgstr "Код пункта"
+
+#: classes/wcpo_officetable.php:41
+msgid "ID"
+msgstr "ID"
+
+#: classes/wcpo_officetable.php:42
+msgid "Point ID"
+msgstr "Код пункта"
+
+#: classes/wcpo_officetable.php:44
+msgid "Delivery Period"
+msgstr "Срок доставки"
+
+#: classes/wcpo_officetable.php:55
+msgid "Insert below"
+msgstr "Вставить ниже"
+
+#: classes/wcpo_officetable.php:56
+msgid "Delete row"
+msgstr "Удалить строку"
+
+#: wc-pickup-offices.php:69
+msgid ""
+"To use this plugin must be installed and activated <strong>wp-handsontable-"
+"core</strong>!<br/>\n"
+"\t\t<a href=\"https://github.com/ivannin/wp-handsontable-core\" target="
+"\"_blank\">https://github.com/ivannin/wp-handsontable-core</a>"
+msgstr ""
+"Чтобы использовать этот плагин должен быть установлен и активирован "
+"<strong>wp-handsontable-core</strong>!<br>\n"
+"\t\t<a href=\"https://github.com/ivannin/wp-handsontable-core\" target="
+"\"_blank\">HTTPS://GitHub.com/ivannin/WP-handsontable-Core</a>"
+
+#. Plugin Name of the plugin/theme
+msgid "Woocommerce Pickup Offices"
+msgstr "Пункты самовывоза для WooCommerce"
+
+#. Plugin URI of the plugin/theme
+msgid "http://in-soft.pro/plugins/wc-pickup-offices/"
+msgstr "http://in-Soft.Pro/plugins/WC-Pickup-Offices/"
+
+#. Description of the plugin/theme
+msgid "This plugin adds the pickup offices list at checkout page"
+msgstr ""
+"Плагин добавляет возможность выбора пунктов самовывоза (из большого "
+"редактируемого списка) на странице оформления заказа."
+
+#. Author of the plugin/theme
+msgid "Ivan Nikitin and partners"
+msgstr "Иван Никитин и партнеры"
+
+#. Author URI of the plugin/theme
+msgid "http://ivannikitin.com"
+msgstr "http://ivannikitin.com"

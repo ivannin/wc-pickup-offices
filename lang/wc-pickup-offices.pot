@@ -1,0 +1,366 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Woocommerce Pickup Offices\n"
+"POT-Creation-Date: 2016-10-09 07:53+0300\n"
+"PO-Revision-Date: 2016-10-09 07:53+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.9\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: wc-pickup-offices.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: classes/wcpo_officelist.php:41
+msgid "Pickup Office Table"
+msgstr ""
+
+#: classes/wcpo_officelist.php:42
+msgid "Edit In Table"
+msgstr ""
+
+#: classes/wcpo_officelist.php:66
+msgctxt "Post Type General Name"
+msgid "Pickup Offices"
+msgstr ""
+
+#: classes/wcpo_officelist.php:67
+msgctxt "Post Type Singular Name"
+msgid "Pickup Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:68 classes/wcpo_officelist.php:69
+#: classes/wcpo_officelist.php:456
+msgid "Pickup Office List"
+msgstr ""
+
+#: classes/wcpo_officelist.php:70
+msgid "Pickup Offices Archives"
+msgstr ""
+
+#: classes/wcpo_officelist.php:71
+msgid "Parent Office:"
+msgstr ""
+
+#: classes/wcpo_officelist.php:72
+msgid "All Offices"
+msgstr ""
+
+#: classes/wcpo_officelist.php:73
+msgid "Add New Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:74
+msgid "Add Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:75
+msgid "New Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:76
+msgid "Edit Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:77
+msgid "Update Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:78
+msgid "View Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:79
+msgid "Search Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:80
+msgid "Not found"
+msgstr ""
+
+#: classes/wcpo_officelist.php:81
+msgid "Not found in Trash"
+msgstr ""
+
+#: classes/wcpo_officelist.php:82
+msgid "Featured Image"
+msgstr ""
+
+#: classes/wcpo_officelist.php:83
+msgid "Set featured image"
+msgstr ""
+
+#: classes/wcpo_officelist.php:84
+msgid "Remove featured image"
+msgstr ""
+
+#: classes/wcpo_officelist.php:85
+msgid "Use as featured image"
+msgstr ""
+
+#: classes/wcpo_officelist.php:86
+msgid "Insert into office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:87
+msgid "Uploaded to this office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:88
+msgid "Offices list"
+msgstr ""
+
+#: classes/wcpo_officelist.php:89
+msgid "Offices list navigation"
+msgstr ""
+
+#: classes/wcpo_officelist.php:90
+msgid "Filter office list"
+msgstr ""
+
+#: classes/wcpo_officelist.php:94
+msgid "Pickup Office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:95
+msgid "Pickup Offices List"
+msgstr ""
+
+#: classes/wcpo_officelist.php:128
+msgctxt "Taxonomy General Name"
+msgid "Pickup Office Types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:129
+msgctxt "Taxonomy Singular Name"
+msgid "Pickup Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:130
+msgid "Pickup Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:131 classes/wcpo_officetable.php:97
+msgid "All Office Types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:132
+msgid "Parent Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:133
+msgid "Parent Office Type:"
+msgstr ""
+
+#: classes/wcpo_officelist.php:134
+msgid "New Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:135
+msgid "Add Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:136
+msgid "Edit Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:137
+msgid "Update Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:138
+msgid "View Office Type"
+msgstr ""
+
+#: classes/wcpo_officelist.php:139
+msgid "Separate types with commas"
+msgstr ""
+
+#: classes/wcpo_officelist.php:140
+msgid "Add or remove types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:141
+msgid "Choose from the most used"
+msgstr ""
+
+#: classes/wcpo_officelist.php:142
+msgid "Popular types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:143
+msgid "Search Office Types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:144
+msgid "Not Found"
+msgstr ""
+
+#: classes/wcpo_officelist.php:145
+msgid "No Office Types"
+msgstr ""
+
+#: classes/wcpo_officelist.php:146
+msgid "Office Type List"
+msgstr ""
+
+#: classes/wcpo_officelist.php:147
+msgid "Office Type List navigation"
+msgstr ""
+
+#: classes/wcpo_officelist.php:181
+msgid "Pickup Office Properties"
+msgstr ""
+
+#: classes/wcpo_officelist.php:238 classes/wcpo_officelist.php:240
+#: classes/wcpo_officelist.php:393 classes/wcpo_officetable.php:43
+msgid "City"
+msgstr ""
+
+#: classes/wcpo_officelist.php:241
+msgid "The city of pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:247 classes/wcpo_officelist.php:249
+msgid "Estimated Delivery Period"
+msgstr ""
+
+#: classes/wcpo_officelist.php:250
+msgid "Estimated Delivery Period to this pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:256 classes/wcpo_officelist.php:394
+#: classes/wcpo_officetable.php:45
+msgid "Subway"
+msgstr ""
+
+#: classes/wcpo_officelist.php:258
+msgid "Subway station"
+msgstr ""
+
+#: classes/wcpo_officelist.php:259
+msgid "The nearest subway station"
+msgstr ""
+
+#: classes/wcpo_officelist.php:265 classes/wcpo_officelist.php:267
+#: classes/wcpo_officelist.php:395 classes/wcpo_officetable.php:46
+msgid "Zip"
+msgstr ""
+
+#: classes/wcpo_officelist.php:268
+msgid "The zip of pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:274 classes/wcpo_officelist.php:276
+#: classes/wcpo_officelist.php:396 classes/wcpo_officetable.php:47
+msgid "Address"
+msgstr ""
+
+#: classes/wcpo_officelist.php:277
+msgid "The address of pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:283 classes/wcpo_officelist.php:285
+#: classes/wcpo_officetable.php:48
+msgid "Open Hours"
+msgstr ""
+
+#: classes/wcpo_officelist.php:286
+msgid "Open hours of pickup offce"
+msgstr ""
+
+#: classes/wcpo_officelist.php:292 classes/wcpo_officelist.php:294
+#: classes/wcpo_officetable.php:49
+msgid "Phone"
+msgstr ""
+
+#: classes/wcpo_officelist.php:295
+msgid "The phone of pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:301 classes/wcpo_officelist.php:303
+#: classes/wcpo_officetable.php:50
+msgid "E-mail"
+msgstr ""
+
+#: classes/wcpo_officelist.php:304
+msgid "The e-mail of pickup office"
+msgstr ""
+
+#: classes/wcpo_officelist.php:310 classes/wcpo_officetable.php:51
+msgid "Terminal"
+msgstr ""
+
+#: classes/wcpo_officelist.php:313
+msgid "Terminal is available"
+msgstr ""
+
+#: classes/wcpo_officelist.php:319 classes/wcpo_officelist.php:321
+#: classes/wcpo_officetable.php:52
+msgid "Max. Weight"
+msgstr ""
+
+#: classes/wcpo_officelist.php:322
+msgid "Max. Weight Limit"
+msgstr ""
+
+#: classes/wcpo_officelist.php:392
+msgid "Pickup Office ID"
+msgstr ""
+
+#: classes/wcpo_officetable.php:41
+msgid "ID"
+msgstr ""
+
+#: classes/wcpo_officetable.php:42
+msgid "Point ID"
+msgstr ""
+
+#: classes/wcpo_officetable.php:44
+msgid "Delivery Period"
+msgstr ""
+
+#: classes/wcpo_officetable.php:55
+msgid "Insert below"
+msgstr ""
+
+#: classes/wcpo_officetable.php:56
+msgid "Delete row"
+msgstr ""
+
+#: wc-pickup-offices.php:69
+msgid ""
+"To use this plugin must be installed and activated <strong>wp-handsontable-"
+"core</strong>!<br/>\n"
+"\t\t<a href=\"https://github.com/ivannin/wp-handsontable-core\" target="
+"\"_blank\">https://github.com/ivannin/wp-handsontable-core</a>"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Woocommerce Pickup Offices"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://in-soft.pro/plugins/wc-pickup-offices/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "This plugin adds the pickup offices list at checkout page"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Ivan Nikitin and partners"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://ivannikitin.com"
+msgstr ""
