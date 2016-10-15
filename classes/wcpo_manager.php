@@ -5,21 +5,28 @@
 class WCPO_Manager
 {
 	/**
-	 * @var WCPO_OfficeList Класс работы со списком пунктов самовывоза
-	 */
-	public $officeList;
-	
-	/**
-	 * @var string 			Путь к файлам плагина
+	 * Путь к файлам плагина
+	 * @var string
 	 */
 	protected $baseDir;
 	
 	/**
-	 * @var string 			URL плагина
+	 * URL плагина
+	 * @var string 			
 	 */
 	protected $baseURL;
 	
-	
+	/**
+	 * Объект работы со списком пунктов самовывоза
+	 * @var WCPO_OfficeList 
+	 */
+	public $officeList;
+
+	/**
+	 * Объект работы с фронтэндом
+	 * @var WCPO_FrontEnd
+	 */
+	public $frontend;	
 	
 	/**
 	 * Конструктор класса
@@ -31,17 +38,17 @@ class WCPO_Manager
 		// Инициализируем свойства
 		$this->baseDir = $baseDir;
 		$this->baseURL = $baseURL;
-		$this->officeList = new WCPO_OfficeList();
+		
+		// Инициализируем объекты
+		$this->officeList 	= new WCPO_OfficeList();
+		$this->frontend 	= new WCPO_FrontEnd( $this );
 		
 		// В режиме админки
 		if ( is_admin() ) 
 		{
 			// Загрузка стилей и скриптов
 			add_action( 'admin_enqueue_scripts', array( $this, 'loadAdminStyles') );
-
-		}
-			
-			
+		}	
 	}
 	
 	/**

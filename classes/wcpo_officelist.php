@@ -219,7 +219,7 @@ class WCPO_OfficeList
 		if( empty( $wcpo_max_weight ) ) 		$wcpo_max_weight = '';
 		
 		/* Form fields:
-		 *	title					Код пункта самовывоза из базы поставщика услуг 
+		 *	title					Код пункта самовывоза из базы поставщика услуг, он же wcpo_point_id 
 		 *	wcpo_city				Город 
 		 * 	wcpo_delivery_period	Срок доставки
 		 * 	wcpo_metro				Метро
@@ -461,14 +461,64 @@ class WCPO_OfficeList
 	/* -------------- Операции с данными -------------- */
 	/**
 	 * Возвращает список городов
+	 * @param string	$type	Слаг типа офиса, если пусто - вернём все 
 	 * @retun mixed
 	 */
-	public function getCities() 
+	public function getCities( $type='' ) 
 	{
+		// TODO: Сделать кэширование
+		
+		/* Вариант 1. Быстрый, но не учитывает тип 
 		global $wpdb;
 		$values = $wpdb->get_col("SELECT meta_value
 			FROM $wpdb->postmeta WHERE meta_key = 'wcpo_city'" );		
 		return $values;
+		*/
+	
+		$cities = array();
+	
+		/**
+		 * Параметры запроса
+		 */
+		$args = array (
+			'post_type'		=> array( self::CPT ),
+			'post_status'	=> array( 'publish' ),
+			'meta_key' 		=> 'wcpo_city',
+			'orderby'		=> 'meta_value',
+			'order'			=> 'ASC',			
+			'posts_per_page'=> -1,			
+		);
+		
+		// Если указан тип, добавляем tax_query
+		if ( ! empty( $type ))
+			$args['tax_query'] = array( 
+				array (
+				'taxonomy' => self::OFFICE_TYPE,
+				'field'    => 'slug',
+				'terms'    => $type,
+				)
+			);	
+		
+		// The Query
+		$query = new WP_Query( $args );
+		
+		// The Loop
+		if ( $query->have_posts() ) 
+		{
+			while ( $query->have_posts() ) 
+			{
+				$query->the_post();				
+				$post_id = get_the_id();
+				$city = get_post_meta( $post_id, 'wcpo_city', true );
+				if ( ! in_array( $city, $cities ))
+					$cities[] = $city;
+			}
+		}
+		
+		// Restore original Post Data
+		wp_reset_postdata();
+
+		return $cities;
 	}	
 	
 	/**
@@ -477,14 +527,16 @@ class WCPO_OfficeList
 	 */
 	public function getOfficeTypes() 
 	{
+		// TODO: Сделать кэширование
+		
 		// Типы офисов	
 		$offceTypes = array();
 		
 		// The Term Query
 		$term_query = new WP_Term_Query( array (
-		'taxonomy'	=> array( self::OFFICE_TYPE ),
-		'fields'    => 'id=>name',
-		'get'		=> 'all',
+			'taxonomy'	=> array( self::OFFICE_TYPE ),
+			'fields'    => 'id=>name',
+			'get'		=> 'all',
 		));
 		
 		// The Loop
@@ -496,7 +548,77 @@ class WCPO_OfficeList
 		return $offceTypes;
 	}	
 	
-	
+	/**
+	 * Возвращает список пунктов
+	 * 
+	 * @param string	$type	Слаг типа офиса, если пусто - вернём все
+	 * @param string	$city	Город, из которого возвращаются пункты
+	 * @retun mixed				Список пунктов в виде ассоциативного массива array( 'ID' => array(...) )
+	 */
+	public function getOffices( $type='', $city='' ) 
+	{
+		// TODO: Сделать кэширование
+		
+		$offices = array();
+
+		// Параметры запроса
+		$args = array (
+			'post_type'		=> array( self::CPT ),
+			'post_status'	=> array( 'publish' ),
+			'meta_key' 		=> 'wcpo_city',
+			'orderby'		=> 'meta_value',
+			'order'			=> 'ASC',			
+			'posts_per_page'=> -1,			
+		);
+		
+		// Если указан город, добавляем его к запросу
+		if ( ! empty( $city ) )
+			$args['meta_value'] = $city;
+		
+		
+		// Если указан тип, добавляем tax_query
+		if ( ! empty( $type ))
+			$args['tax_query'] = array( 
+				array (
+					'taxonomy' => self::OFFICE_TYPE,
+					'field'    => 'slug',
+					'terms'    => $type,
+					)
+			);
+		
+		// Запрос
+		$query = new WP_Query( $args );
+		
+		// The Loop
+		if ( $query->have_posts() ) 
+		{
+			while ( $query->have_posts() ) 
+			{
+				$query->the_post();
+				
+				$post_id = get_the_id();
+				$offices[$post_id] = array(
+					'wcpo_point_id'			=> get_the_title(),
+					'wcpo_city'				=> get_post_meta( $post_id, 'wcpo_city', true ),
+					'wcpo_delivery_period'	=> get_post_meta( $post_id, 'wcpo_delivery_period', true ),
+					'wcpo_metro'			=> get_post_meta( $post_id, 'wcpo_metro', true ),
+					'wcpo_zip'				=> get_post_meta( $post_id, 'wcpo_zip', true ),
+					'wcpo_address'			=> get_post_meta( $post_id, 'wcpo_address', true ),
+					'wcpo_open_hours'		=> get_post_meta( $post_id, 'wcpo_open_hours', true ),
+					'wcpo_phone'			=> get_post_meta( $post_id, 'wcpo_phone', true ),
+					'wcpo_email'			=> get_post_meta( $post_id, 'wcpo_email', true ),
+					'wcpo_terminal'			=> get_post_meta( $post_id, 'wcpo_terminal', true ),
+					'wcpo_max_weight'		=> get_post_meta( $post_id, 'wcpo_max_weight', true ),
+				);
+			}
+		}
+		
+		// Restore original Post Data
+		wp_reset_postdata();		
+		
+		// Возвращаем результат
+		return $offices;
+	}	
 	
 	
 	

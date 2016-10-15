@@ -136,7 +136,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 			'post_status'	=> array( 'publish' ),
 			'meta_key' 		=> 'wcpo_city',
 			'orderby'		=> 'meta_value',
-			'order'			=> 'ASC',			
+			'order'			=> 'ASC',	
 			'posts_per_page'=> -1,			
 		);
 		

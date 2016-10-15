@@ -49,7 +49,7 @@ function wcpo_init()
 		require( WCPO_PATH . 'classes/wcpo_officelist.php' );
 		require( WCPO_PATH . 'classes/wcpo_manager.php' );
 		require( WCPO_PATH . 'classes/wcpo_officetable.php' );
-		
+		require( WCPO_PATH . 'classes/wcpo_frontend.php' );
 			
 		// Инициализация плагина
 		new WCPO_Manager( WCPO_PATH, WCPO_URL );	
