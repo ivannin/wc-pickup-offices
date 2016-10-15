@@ -18,8 +18,8 @@ jQuery(function($){
 		container		= $('div#wcpo_frontend'),
 		
 		// Текстовые значения способов доставки, НАДО БРАТЬ из локализации
-		methodCourier	= 'курьер',
-		methodPickup	= 'пункт самовывоза',
+		methodCourier	= wcpo_frontend.courierRE,
+		methodPickup	= wcpo_frontend.pickupRE,
 		deliveryPerod	= wcpo_frontend.deliveryPerod;
 
 	// Функция возвращает название выбранного метода доставки
