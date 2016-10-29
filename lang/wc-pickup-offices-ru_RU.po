@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Woocommerce Pickup Offices\n"
-"POT-Creation-Date: 2016-10-15 18:20+0300\n"
-"PO-Revision-Date: 2016-10-15 18:25+0300\n"
+"POT-Creation-Date: 2016-10-29 17:55+0300\n"
+"PO-Revision-Date: 2016-10-29 17:56+0300\n"
 "Last-Translator: Иван Никитин <info@ivannikitin.com>\n"
 "Language-Team: \n"
 "Language: ru_RU\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-WPHeader: wc-pickup-offices.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -46,35 +46,36 @@ msgstr "самовывоз"
 msgid "Estimated Delivery Period"
 msgstr "Срок доставки"
 
-#: classes/wcpo_frontend.php:205 classes/wcpo_frontend.php:258
-#: classes/wcpo_frontend.php:271 classes/wcpo_frontend.php:278
+#: classes/wcpo_frontend.php:205 classes/wcpo_frontend.php:261
+msgid "City of pickup office"
+msgstr "Город пункта самовывоза"
+
+#: classes/wcpo_frontend.php:213 classes/wcpo_frontend.php:262
+msgid "Subway near pickup office"
+msgstr "Станция метро"
+
+#: classes/wcpo_frontend.php:221 classes/wcpo_frontend.php:263
+#: classes/wcpo_frontend.php:289 classes/wcpo_frontend.php:298
+#: classes/wcpo_officelist.php:94
+msgid "Pickup Office"
+msgstr "Пункт самовывоза"
+
+#: classes/wcpo_frontend.php:230 classes/wcpo_frontend.php:264
+#: classes/wcpo_frontend.php:290 classes/wcpo_frontend.php:300
+msgid "Pickup Office Information"
+msgstr "Информация о пункте самовывоза"
+
+#: classes/wcpo_frontend.php:287 classes/wcpo_frontend.php:294
 #: classes/wcpo_officelist.php:238 classes/wcpo_officelist.php:240
 #: classes/wcpo_officelist.php:393 classes/wcpo_officetable.php:43
 msgid "City"
 msgstr "Город"
 
-#: classes/wcpo_frontend.php:205 classes/wcpo_frontend.php:213
-#: classes/wcpo_frontend.php:221
-msgid "Specify only for shipping to pickup office"
-msgstr "указывайте только в случае доставки в пункт самовывоза"
-
-#: classes/wcpo_frontend.php:213 classes/wcpo_frontend.php:259
-#: classes/wcpo_frontend.php:272 classes/wcpo_frontend.php:280
+#: classes/wcpo_frontend.php:288 classes/wcpo_frontend.php:296
 #: classes/wcpo_officelist.php:256 classes/wcpo_officelist.php:394
 #: classes/wcpo_officetable.php:45
 msgid "Subway"
 msgstr "Метро"
-
-#: classes/wcpo_frontend.php:221 classes/wcpo_frontend.php:260
-#: classes/wcpo_frontend.php:273 classes/wcpo_frontend.php:282
-#: classes/wcpo_officelist.php:94
-msgid "Pickup Office"
-msgstr "Пункт самовывоза"
-
-#: classes/wcpo_frontend.php:230 classes/wcpo_frontend.php:261
-#: classes/wcpo_frontend.php:274 classes/wcpo_frontend.php:284
-msgid "Pickup Office Information"
-msgstr "Информация о пункте самовывоза"
 
 #: classes/wcpo_officelist.php:41
 msgid "Pickup Office Table"
@@ -408,3 +409,6 @@ msgstr "Иван Никитин и партнеры"
 #. Author URI of the plugin/theme
 msgid "http://ivannikitin.com"
 msgstr "http://ivannikitin.com"
+
+#~ msgid "Specify only for shipping to pickup office"
+#~ msgstr "указывайте только в случае доставки в пункт самовывоза"
