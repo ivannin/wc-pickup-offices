@@ -160,8 +160,8 @@ class WCPO_FrontEnd
 		// Добавляем новое поле "Пункт самовывоза" в доставку
 		// https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/
 		add_action( 'woocommerce_before_order_notes', 						array( $this, 'addPickupOfficeField' ) );
-		add_filter( 'woocommerce_checkout_update_order_meta' , 				array( $this, 'savePickupData' ) );
-		add_filter( 'woocommerce_admin_order_data_after_shipping_address' , array( $this, 'showCheckoutField' ) );
+		add_filter( 'woocommerce_checkout_update_order_meta', 				array( $this, 'savePickupData' ) );
+		add_filter( 'woocommerce_admin_order_data_after_shipping_address',	array( $this, 'showCheckoutField' ) );
 	}
 	
 	/**
@@ -202,7 +202,7 @@ class WCPO_FrontEnd
 		woocommerce_form_field( $fieldCity, array(
 			'type'          => 'text',
 			'class'         => array('pickup-offce-class form-row-wide'),
-			'label'         => __( 'City', WCPO_TEXT_DOMAIN ) . ' - ' . __( 'Specify only for shipping to pickup office', WCPO_TEXT_DOMAIN ),
+			'label'         => __( 'City of pickup office', WCPO_TEXT_DOMAIN ),
 		), $checkout->get_value( $fieldCity ));
 		
 		// Метро
@@ -210,7 +210,7 @@ class WCPO_FrontEnd
 		woocommerce_form_field( $fieldMetro, array(
 			'type'          => 'text',
 			'class'         => array('pickup-offce-class form-row-wide'),
-			'label'         => __( 'Subway', WCPO_TEXT_DOMAIN ). ' - ' . __( 'Specify only for shipping to pickup office', WCPO_TEXT_DOMAIN ),
+			'label'         => __( 'Subway near pickup office', WCPO_TEXT_DOMAIN ),
 		), $checkout->get_value( $fieldMetro ));		
 		
 		// Пункты
@@ -218,7 +218,7 @@ class WCPO_FrontEnd
 		woocommerce_form_field( $fieldOffice, array(
 			'type'          => 'text',
 			'class'         => array('pickup-offce-class form-row-wide'),
-			'label'         => __( 'Pickup Office', WCPO_TEXT_DOMAIN ). ' - ' . __( 'Specify only for shipping to pickup office', WCPO_TEXT_DOMAIN ),
+			'label'         => __( 'Pickup Office', WCPO_TEXT_DOMAIN ),
 			), $checkout->get_value( $fieldOffice ));
 			
 		// Пункты
@@ -242,6 +242,9 @@ class WCPO_FrontEnd
 	 */
 	function savePickupData( $order_id )
 	{
+		// DEBUG: Выводим сожержание POST
+		if ( WP_DEBUG ) file_put_contents( WCPO_PATH.'wc_post.log', var_export( $_POST, true ) );
+		
 		// Order fields
 		$fieldCity = self::FIELD_PICKUP_OFFICE . '_city';
 		$fieldMetro = self::FIELD_PICKUP_OFFICE . '_metro';
@@ -252,13 +255,26 @@ class WCPO_FrontEnd
 		$city = isset( $_POST[ $fieldCity ] ) ? sanitize_text_field( $_POST[ $fieldCity ] ) : '';
 		$metro = isset( $_POST[ $fieldMetro ] ) ? sanitize_text_field( $_POST[ $fieldMetro ] ) : '';		
 		$office = isset( $_POST[ $fieldOffice ] ) ? sanitize_text_field( $_POST[ $fieldOffice ] ) : '';		
-		$info = isset( $_POST[ $fieldInfo ] ) ? sanitize_text_field( $_POST[ 'wcpo_metro' ] ) : '';		
+		$info = isset( $_POST[ $fieldInfo ] ) ? sanitize_text_field( $_POST[ $fieldInfo ] ) : '';		
 		
 		// Update data
-		update_post_meta( $order_id, __( 'City', WCPO_TEXT_DOMAIN ), 						$city );
-		update_post_meta( $order_id, __( 'Subway', WCPO_TEXT_DOMAIN ), 						$metro );
+		update_post_meta( $order_id, __( 'City of pickup office', WCPO_TEXT_DOMAIN ),		$city );
+		update_post_meta( $order_id, __( 'Subway near pickup office', WCPO_TEXT_DOMAIN ), 	$metro );
 		update_post_meta( $order_id, __( 'Pickup Office', WCPO_TEXT_DOMAIN ), 				$office );
 		update_post_meta( $order_id, __( 'Pickup Office Information', WCPO_TEXT_DOMAIN ), 	$info );
+		
+		// Заменяем существующие значения полей WooCoomerce
+		update_post_meta( $order_id, '_shipping_postcode',	'' );
+		update_post_meta( $order_id, '_shipping_state',		'' );
+		update_post_meta( $order_id, '_shipping_city',		$city );
+		update_post_meta( $order_id, '_shipping_address_1',	$office );
+		update_post_meta( $order_id, '_shipping_address_2',	'' );
+		
+		// Записываем данные о пункте в заметку заказа
+		$orderPost = get_post( $order_id );
+		$orderPost->post_excerpt .= PHP_EOL . '<br>' . PHP_EOL . $info;
+		wp_update_post($orderPost);		
+		
 	}	
 	
 	/**

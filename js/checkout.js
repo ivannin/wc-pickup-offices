@@ -6,13 +6,25 @@ jQuery(function($){
 	var debug = true;	
 		
 	// Требуемые поля, с которыми работаем
-	var billingCity 	= $('#billing_city'),
-		shippingCity 	= $('#billing_city'),
+	var 
+		billingPostCode 	= $('#billing_postcode'),
+		billingCity 		= $('#billing_city'),
+		billingState 		= $('#billing_state'),
+		billingAddr1 		= $('#billing_address_1'),
+		billingAddr2 		= $('#billing_address_2'),		
+	
+		shippingPostCode 	= $('#shipping_postcode'),
+		shippingCity 		= $('#shipping_city'),
+		shippingState 		= $('#shipping_state'),
+		shippingAddr1 		= $('#shipping_address_1'),
+		shippingAddr2 		= $('#shipping_address_2'),
+		
 		pickupCity 		= $('#pickup_office_city'),
 		pickupMetro		= $('#pickup_office_metro'),
 		pickupOffice	= $('#pickup_office_point'),
 		pickupInfo		= $('#pickup_office_info'),
 		radioShipping	= $('#shipping_method input.shipping_method'),
+		
 		
 		// Мой контейнер
 		container		= $('div#wcpo_frontend'),
@@ -24,17 +36,70 @@ jQuery(function($){
 
 	// Функция возвращает название выбранного метода доставки
 	function getCurrentMethod() {
-		var method = $('#shipping_method input.shipping_method[checked]').parent().find('label').text();
-		debug && console.log('getCurrentMethod: ', method);
+		var method = radioShipping.filter(':checked').parent().find('label').text();
+		//debug && console.log('getCurrentMethod: ', method);
 		return 	method;
 	}
-
 		
 	// Функция возвращает true, если выбран указанный тип доставки	
 	function isShippingMethod( method )	{
 		var re = new RegExp(method, 'i');
 		return re.test( getCurrentMethod() );
 	}	
+	
+	// Обработчик переключения способов доставки
+	$('#shipping_method input.shipping_method').on('change', function(){
+		// Покажем нужные поля
+			showShippingFields();
+	});
+	
+	// Функция отрисовки нужных полей при разных методах доставки
+	function showShippingFields() {
+		//debug && console.log('showShippingFields ');
+		// Текущий метод доставки
+		var method = getCurrentMethod();
+		
+		// Если доставка в пункт самовывоза
+		if ( isShippingMethod( methodPickup ) )
+		{
+			// Скроем поля из адреса ДОСТАВКИ
+			billingPostCode.parent().hide();
+			billingState.parent().hide();
+			billingCity.parent().hide();
+			billingAddr1.parent().hide();
+			billingAddr2.parent().hide();
+			
+			shippingPostCode.parent().hide();
+			shippingState.parent().hide();
+			shippingCity.parent().hide();
+			shippingAddr1.parent().hide();
+			shippingAddr2.parent().hide();	
+
+			container.show();
+		}
+		else
+		{
+			// Покажем все поля
+			billingPostCode.parent().show();
+			billingState.parent().show();
+			billingCity.parent().show();
+			billingAddr1.parent().show();
+			billingAddr2.parent().show();	
+
+			shippingPostCode.parent().show();
+			shippingState.parent().show();
+			shippingCity.parent().show();
+			shippingAddr1.parent().show();
+			shippingAddr2.parent().show();		
+
+			container.hide();			
+		}
+		
+	}
+	// Покажем правильные поля прямо сейчас
+	showShippingFields();
+	
+	
 
 	// Функция устанавливает значение города по данным полей заказа
 	function setCity()
@@ -46,6 +111,7 @@ jQuery(function($){
 	}
 	// Установим значение города прямо сейчас
 	setCity();
+	
 	// Установим значение города при изменении полей заказа
 	billingCity.on('blur', setCity);
 	shippingCity.on('blur', setCity);
