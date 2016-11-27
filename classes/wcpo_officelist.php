@@ -519,7 +519,69 @@ class WCPO_OfficeList
 		wp_reset_postdata();
 
 		return $cities;
+	}
+	
+	/* -------------- Операции с данными -------------- */
+	/**
+	 * Возвращает список городов в виде ассоциативного массива ГОРОД => Массив данных
+	 * @param string	$type	Слаг типа офиса, если пусто - вернём все 
+	 * @retun mixed
+	 */
+	public function getCitiesData( $type='' ) 
+	{
+		// TODO: Сделать кэширование
+		$cities = array();
+	
+		/**
+		 * Параметры запроса
+		 */
+		$args = array (
+			'post_type'		=> array( self::CPT ),
+			'post_status'	=> array( 'publish' ),
+			'meta_key' 		=> 'wcpo_city',
+			'orderby'		=> 'meta_value',
+			'order'			=> 'ASC',			
+			'posts_per_page'=> -1,			
+		);
+		
+		// Если указан тип, добавляем tax_query
+		if ( ! empty( $type ))
+			$args['tax_query'] = array( 
+				array (
+				'taxonomy' => self::OFFICE_TYPE,
+				'field'    => 'slug',
+				'terms'    => $type,
+				)
+			);	
+		
+		// The Query
+		$query = new WP_Query( $args );
+		
+		// The Loop
+		if ( $query->have_posts() ) 
+		{
+			while ( $query->have_posts() ) 
+			{
+				$query->the_post();				
+				$post_id = get_the_id();
+				$city = get_post_meta( $post_id, 'wcpo_city', true );
+				if ( ! array_key_exists( $city, $cities ) )
+				{
+					$cities[$city] = array(
+						'wcpo_delivery_period' 	=> get_post_meta( $post_id, 'wcpo_delivery_period', true ),
+						'wcpo_max_weight' 		=> get_post_meta( $post_id, 'wcpo_max_weight', true ),
+					);
+				}
+			}
+		}
+		
+		// Restore original Post Data
+		wp_reset_postdata();
+
+		return $cities;
 	}	
+	
+	
 	
 	/**
 	 * Возвращает список типов офисов

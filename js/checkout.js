@@ -118,36 +118,77 @@ jQuery(function($){
 
 	// Автозаполнение городов, включается по фокусу на элементе
 	pickupCity.on('focus', function(){
+		// Очистим метро
+		pickupMetro.val('');
+		
 		if ( isShippingMethod( methodCourier ) ){
 			pickupCity.autocomplete({
 				source: wcpo_frontend.courierCities,
 				minLength: 0
 			});
-			debug && console.log('pickupCity dataSource: ', wcpo_frontend.courierCities);
+			//debug && console.log('pickupCity dataSource: ', wcpo_frontend.courierCities);
 			pickupCity.autocomplete( 'search', pickupCity.val() );
 		}
 		else if ( isShippingMethod( methodPickup ) ) {
 			pickupCity.autocomplete({
 				source: wcpo_frontend.pickupCities,
-				minLength: 0
+				minLength: 0,
+				change: function( event, ui ){
+					var thisField = $(this);
+					
+					// Разрешаем только города из списка!
+					//debug && console.log('pickupCity.autocomplete : ', ui.item);
+					thisField.val( (ui.item ? ui.item.value : "" ) );
+					
+					// Поскольку billingCity обязательный, то заполняем его, если он сейчас пустой или поле скрыто
+					if ( billingCity.val() == '' && thisField.val() != '' )
+						billingCity.val( thisField.val() );
+				}				
 			});	
-			debug && console.log('pickupCity dataSource: ', wcpo_frontend.pickupCities);
+			//debug && console.log('pickupCity dataSource for methodPickup: ', wcpo_frontend.pickupCities);
 			pickupCity.autocomplete( 'search', pickupCity.val() );
 		}
 		else{
 			pickupCity.autocomplete({
 				source: []
 			});
-			debug && console.log('pickupCity dataSource: ', []);
+			//debug && console.log('pickupCity dataSource: ', []);
 		}
 	});
+	
+	// Автозаполнение городов при доставке курьером, включается по фокусу на элементе billingCity
+	billingCity.on('focus', function(){
+		if ( isShippingMethod( methodCourier ) ){
+			// Доставка курьером, включаем автозаполнение
+			billingCity.autocomplete({
+				source: wcpo_frontend.courierCities,
+				minLength: 0,
+				change: function( event, ui ){
+					// Разрешаем только города из списка!
+					//debug && console.log('billingCity.autocomplete : ', ui.item);
+					$(this).val((ui.item ? ui.item.value : ""));
+				}
+			});
+			//debug && console.log('billingCity dataSource: ', wcpo_frontend.courierCities);
+			billingCity.autocomplete( 'search', pickupCity.val() );
+		}
+		else{
+			// Доставка иная, выключаем автозаполнение
+			billingCity.autocomplete({
+				source: []
+			});
+			//debug && console.log('billingCity dataSource: ', []);
+		}
+	});	
+	
+	
 	
 	// Автозаполнение метро, включается по фокусу на элементе
 	pickupMetro.on('focus', function(){
 		// Только для достаки из пунктов самовывоза
 		if ( ! isShippingMethod( methodPickup ) )
 		{
-			debug && console.log('pickupMetro disabled');
+			//debug && console.log('pickupMetro disabled');
 			return;
 		}
 			
@@ -244,8 +285,4 @@ jQuery(function($){
 		
 		pickupInfo.val( officeName );	
 	}
-	
-
-	
-	
 });

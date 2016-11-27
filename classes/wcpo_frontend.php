@@ -142,10 +142,12 @@ class WCPO_FrontEnd
 		$output = '<ul class="pickup-office-city-list">' . PHP_EOL;		
 		
 		// Список городов
-		$cities = $this->manager->officeList->getCities( $type );
-		foreach ( $cities as $city )
-			$output .= '<li>' . esc_html( $city) . '</li>' . PHP_EOL;
-		
+		$cities = $this->manager->officeList->getCitiesData( $type );
+		foreach ( $cities as $city => $cityData )
+		{
+			$output .= '<li>' . esc_html( $city ) . ' (' . esc_html( $cityData['wcpo_delivery_period'] ) . ' дн.)</li>' . PHP_EOL;
+			
+		}
 		// Вывод
 		$output .= '</ul><!--/pickup-office-city-list -->' . PHP_EOL;
 		return $output;		
@@ -263,18 +265,21 @@ class WCPO_FrontEnd
 		update_post_meta( $order_id, __( 'Pickup Office', WCPO_TEXT_DOMAIN ), 				$office );
 		update_post_meta( $order_id, __( 'Pickup Office Information', WCPO_TEXT_DOMAIN ), 	$info );
 		
-		// Заменяем существующие значения полей WooCoomerce
-		update_post_meta( $order_id, '_shipping_postcode',	'' );
-		update_post_meta( $order_id, '_shipping_state',		'' );
-		update_post_meta( $order_id, '_shipping_city',		$city );
-		update_post_meta( $order_id, '_shipping_address_1',	$office );
-		update_post_meta( $order_id, '_shipping_address_2',	'' );
-		
-		// Записываем данные о пункте в заметку заказа
-		$orderPost = get_post( $order_id );
-		$orderPost->post_excerpt .= PHP_EOL . '<br>' . PHP_EOL . $info;
-		wp_update_post($orderPost);		
-		
+		// Если указан пункт самовывоза, то мы в заказе заменим адрес доставки на данные самовывоза
+		if ( ! empty( $office ))
+		{
+			// Заменяем существующие значения полей WooCoomerce
+			update_post_meta( $order_id, '_shipping_postcode',	'' );
+			update_post_meta( $order_id, '_shipping_state',		'' );
+			update_post_meta( $order_id, '_shipping_city',		$city );
+			update_post_meta( $order_id, '_shipping_address_1',	$office );
+			update_post_meta( $order_id, '_shipping_address_2',	'' );
+
+			// Записываем данные о пункте в заметку заказа
+			$orderPost = get_post( $order_id );
+			$orderPost->post_excerpt .= PHP_EOL . '<br>' . PHP_EOL . $info;
+			wp_update_post($orderPost);	
+		}
 	}	
 	
 	/**
