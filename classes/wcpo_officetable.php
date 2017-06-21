@@ -50,6 +50,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		$wcpo_email				= __( 'E-mail', WCPO_TEXT_DOMAIN );
 		$wcpo_terminal			= __( 'Terminal', WCPO_TEXT_DOMAIN );
 		$wcpo_max_weight		= __( 'Max. Weight', WCPO_TEXT_DOMAIN );
+		$wcpo_href				= __( 'Href', WCPO_TEXT_DOMAIN );
 		
 		// Название пунктов меню
 		$menu_insertBelow		= __( 'Insert below', WCPO_TEXT_DOMAIN );
@@ -57,7 +58,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		
 		return "{
 			minSpareRows: 1,
-			colHeaders: ['$wcpo_id', '$wcpo_city', '$wcpo_point_id', '$wcpo_delivery_period', '$wcpo_metro', '$wcpo_zip', '$wcpo_address', '$wcpo_open_hours', '$wcpo_phone', '$wcpo_email', '$wcpo_terminal', '$wcpo_max_weight'],
+			colHeaders: ['$wcpo_id', '$wcpo_city', '$wcpo_point_id', '$wcpo_delivery_period', '$wcpo_metro', '$wcpo_zip', '$wcpo_address', '$wcpo_open_hours', '$wcpo_phone', '$wcpo_email', '$wcpo_terminal', '$wcpo_max_weight', '$wcpo_href'],
 			columns: [
 			{ data: 'id', 					type: 'numeric', 	readOnly: true },
 			{ data: 'wcpo_city',			type: 'text' },			
@@ -70,7 +71,8 @@ class WCPO_OfficeTable extends WP_HOT_Core
 			{ data: 'wcpo_phone',			type: 'text' },
 			{ data: 'wcpo_email',			type: 'text' },		
 			{ data: 'wcpo_terminal',		type: 'text' },	
-			{ data: 'wcpo_max_weight',		type: 'text' }		
+			{ data: 'wcpo_max_weight',		type: 'text' },		
+			{ data: 'wcpo_href',			type: 'text' }		
 			],
 			stretchH: 'all',
 			rowHeaders: true,
@@ -128,7 +130,8 @@ class WCPO_OfficeTable extends WP_HOT_Core
 	 */
     public static function getOffices( $officeTypeId = 0) 
     {
-        $offices = array();
+		
+		$offices = array();
 		
 		// WP_Query arguments
 		$args = array (
@@ -173,6 +176,7 @@ class WCPO_OfficeTable extends WP_HOT_Core
 					'wcpo_email'			=> get_post_meta( $post_id, 'wcpo_email', true ),
 					'wcpo_terminal'			=> get_post_meta( $post_id, 'wcpo_terminal', true ),
 					'wcpo_max_weight'		=> get_post_meta( $post_id, 'wcpo_max_weight', true ),
+					'wcpo_href'				=> get_post_meta( $post_id, 'wcpo_href', true ),
 				);
 			}
 		}
@@ -250,8 +254,12 @@ class WCPO_OfficeTable extends WP_HOT_Core
 				update_post_meta( $office->id, 'wcpo_email', 			$office->wcpo_email );
 				update_post_meta( $office->id, 'wcpo_terminal', 		$office->wcpo_terminal );
 				update_post_meta( $office->id, 'wcpo_max_weight', 		$office->wcpo_max_weight );				
+				update_post_meta( $office->id, 'wcpo_href', 			$office->wcpo_href );				
 			}
 		}
+		
+		// Сброс кэша
+		self::ajaxClearCache();
 		
 		$offices = self::getOffices( $officeTypeId );
 		echo json_encode($offices);
@@ -272,8 +280,25 @@ class WCPO_OfficeTable extends WP_HOT_Core
 		{
 			wp_delete_post( $id, true );
 		}
+		
+		// Сброс кэша
+		self::ajaxClearCache();
+		
+		
 		echo json_encode(true);
 		wp_die();
+	}
+	
+	/** 
+	 * Сброс кэша
+	 * Метод статичный, потому что вызывается Аяксом
+	 */
+    public static function ajaxClearCache() 	
+	{
+		delete_transient( 'wcpo_cities' );
+		delete_transient( 'wcpo_cities_data' );
+		delete_transient( 'wcpo_office_types' );
+		delete_transient( 'wcpo_offices' );
 	}
 	
 }

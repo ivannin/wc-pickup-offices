@@ -98,7 +98,16 @@ class WCPO_FrontEnd
 					foreach ($cols as $i => $col)
 					{
 						$output .= '<td>';
-						$output .= ( isset( $office[$col] ) ) ? esc_html( $office[$col] ) : '&nbsp;';
+						if ( ( $col == 'wcpo_point_id' || $col == 'wcpo_address' ) && ! empty( $office['wcpo_href'] ) )
+						{
+							$output .= '<a href="' . esc_attr( $office['wcpo_href'] ) . '" target="_blank" rel="nofollow">' . 
+								( ( isset( $office[$col] ) ) ? esc_html( $office[$col] ) : '&nbsp;' ) . 
+								'</a>';
+						}
+						else
+						{
+							$output .= ( isset( $office[$col] ) ) ? esc_html( $office[$col] ) : '&nbsp;';
+						}
 						$output .= '</td>';						
 					}
 					$output .= '</tr>' . PHP_EOL;
@@ -145,7 +154,14 @@ class WCPO_FrontEnd
 		$cities = $this->manager->officeList->getCitiesData( $type );
 		foreach ( $cities as $city => $cityData )
 		{
-			$output .= '<li>' . esc_html( $city ) . ' (' . esc_html( $cityData['wcpo_delivery_period'] ) . ' дн.)</li>' . PHP_EOL;
+			if ( ! empty( $cityData['wcpo_href'] ) )
+			{
+				$output .= '<li><a href="' .  esc_attr( $cityData['wcpo_href'] ) . '" target="_blank" rel="nofollow">' . esc_html( $city ) . ' (' . esc_html( $cityData['wcpo_delivery_period'] ) . ' дн.)</li>' . PHP_EOL;			
+			}
+			else
+			{
+				$output .= '<li>' . esc_html( $city ) . ' (' . esc_html( $cityData['wcpo_delivery_period'] ) . ' дн.)</li>' . PHP_EOL;				
+			}
 			
 		}
 		// Вывод

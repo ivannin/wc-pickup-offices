@@ -34,6 +34,7 @@ if ( ! defined( 'ABSPATH' ) )
 define( 'WCPO_TEXT_DOMAIN', 'wc-pickup-offices' );		// Текстовый домен
 define( 'WCPO_PATH', plugin_dir_path( __FILE__ ) );		// Путь к папке плагина
 define( 'WCPO_URL', plugin_dir_url( __FILE__ ) );		// URL к папке плагина
+define( 'WCPO_CACHE_TIMEOUT', 2 * 60 * 60 * 24 );		// Время кэширования
 
 // Инициализация плагина
 add_action( 'init', 'wcpo_init' );

@@ -12,6 +12,12 @@ class WCPO_OfficeList
 	protected $officeTable;
 	
 	/**
+	 * Список ключей кэша этого класса
+	 * @mixed cacheKeys
+	 */
+	protected $cacheKeys;
+	
+	/**
 	 * Конструктор класса
 	 */
 	public function __construct(  )
@@ -22,6 +28,15 @@ class WCPO_OfficeList
 		
 		// Регистрация таксономии типов пунктов
 		$this->registerTypeTaxonomy();
+		
+		// Список ключей кэша для этого класса
+		$this->cacheKeys = array(
+			'wcpo_cities',
+			'wcpo_cities_data',
+			'wcpo_office_types',
+			'wcpo_offices',
+		);
+		
 		
 		// В режиме админки
 		if ( is_admin() ) 
@@ -97,7 +112,7 @@ class WCPO_OfficeList
 			'supports'              => array( 'title', 'editor', 'comments', /*'custom-fields',*/ ),
 			'taxonomies'            => null,
 			'hierarchical'          => false,
-			'public'                => true,
+			'public'                => false,
 			'show_ui'               => true,
 			'show_in_menu'          => true,
 			'menu_position'         => 56,
@@ -105,9 +120,9 @@ class WCPO_OfficeList
 			'show_in_admin_bar'     => false,
 			'show_in_nav_menus'     => true,
 			'can_export'            => true,
-			'has_archive'           => true,		
-			'exclude_from_search'   => false,
-			'publicly_queryable'    => true,
+			'has_archive'           => false,		
+			'exclude_from_search'   => true,
+			'publicly_queryable'    => false,
 			'capability_type'       => 'page',
 		);
 		
@@ -158,7 +173,17 @@ class WCPO_OfficeList
 		register_taxonomy( self::OFFICE_TYPE, array( self::CPT ), $args );
 	}
 	
-	
+	/* -------------- Управление кэшем -------------- */	
+	/**
+	 * Очистка кэша
+	 */
+	public function clearCache() 
+	{	
+		foreach ( $this->cacheKeys as $key )
+		{
+			delete_transient( $key );
+		}
+	}	 
 	
 	/* -------------- Метабокс и свойства записи -------------- */
 	/**
@@ -205,6 +230,7 @@ class WCPO_OfficeList
 		$wcpo_email 			= get_post_meta( $post->ID, 'wcpo_email', true );
 		$wcpo_terminal 			= get_post_meta( $post->ID, 'wcpo_terminal', true );
 		$wcpo_max_weight 		= get_post_meta( $post->ID, 'wcpo_max_weight', true );
+		$wcpo_href		 		= get_post_meta( $post->ID, 'wcpo_href', true );
 
 		// Set default values.
 		if( empty( $wcpo_city ) ) 				$wcpo_city = '';
@@ -217,6 +243,7 @@ class WCPO_OfficeList
 		if( empty( $wcpo_email ) ) 				$wcpo_email = '';
 		if( empty( $wcpo_terminal ) ) 			$wcpo_terminal = false;
 		if( empty( $wcpo_max_weight ) ) 		$wcpo_max_weight = '';
+		if( empty( $wcpo_href ) ) 				$wcpo_href = '';
 		
 		/* Form fields:
 		 *	title					Код пункта самовывоза из базы поставщика услуг, он же wcpo_point_id 
@@ -230,6 +257,7 @@ class WCPO_OfficeList
 		 * 	wcpo_email				Эл. почта
 		 * 	wcpo_terminal			Наличие терминала 
 		 * 	wcpo_max_weight			Ограничение по весу
+		 * 	wcpo_href				Ссылка на пункт во внешеней системе
 		 */
 		echo '<table class="form-table">';
 		
@@ -321,7 +349,16 @@ class WCPO_OfficeList
 		echo '			<input type="text" id="wcpo_max_weight" name="wcpo_max_weight" class="wcpo_max_weight_field" placeholder="' . esc_attr__( 'Max. Weight', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_max_weight ) . '">';
 		echo '			<p class="description">' . __( 'Max. Weight Limit', WCPO_TEXT_DOMAIN ) . '</p>';
 		echo '		</td>';
-		echo '	</tr>';			
+		echo '	</tr>';
+
+		/* wcpo_href			Ссылка на пункт во внешеней системе */
+		echo '	<tr>';
+		echo '		<th><label for="wcpo_href" class="wcpo_href_label">' . __( 'Href', WCPO_TEXT_DOMAIN ) . '</label></th>';
+		echo '		<td>';
+		echo '			<input type="text" id="wcpo_href" name="wcpo_href" class="wcpo_href_field" placeholder="' . esc_attr__( 'Href', WCPO_TEXT_DOMAIN ) . '" value="' . esc_attr__( $wcpo_href ) . '">';
+		echo '			<p class="description">' . __( 'Href', WCPO_TEXT_DOMAIN ) . '</p>';
+		echo '		</td>';
+		echo '	</tr>';		
 		
 		echo '</table>';
 		
@@ -366,7 +403,8 @@ class WCPO_OfficeList
 		$wcpo_new_phone = isset( $_POST[ 'wcpo_phone' ] ) ? sanitize_text_field( $_POST[ 'wcpo_phone' ] ) : '';		
 		$wcpo_new_email = isset( $_POST[ 'wcpo_email' ] ) ? sanitize_text_field( $_POST[ 'wcpo_email' ] ) : '';			
 		$wcpo_new_terminal = isset( $_POST[ 'wcpo_terminal' ] ) ? '1'  : '0';
-		$wcpo_new_max_weight = isset( $_POST[ 'wcpo_max_weight' ] ) ? sanitize_text_field( $_POST[ 'wcpo_email' ] ) : '';			
+		$wcpo_new_max_weight = isset( $_POST[ 'wcpo_max_weight' ] ) ? sanitize_text_field( $_POST[ 'wcpo_max_weight' ] ) : '';			
+		$wcpo_href = isset( $_POST[ 'wcpo_href' ] ) ? sanitize_text_field( $_POST[ 'wcpo_href' ] ) : '';			
 		
 		// Update the meta field in the database.
 		update_post_meta( $post_id, 'wcpo_city', 			$wcpo_new_city );
@@ -379,6 +417,10 @@ class WCPO_OfficeList
 		update_post_meta( $post_id, 'wcpo_email', 			$wcpo_new_email );
 		update_post_meta( $post_id, 'wcpo_terminal', 		$wcpo_new_terminal );
 		update_post_meta( $post_id, 'wcpo_max_weight', 		$wcpo_new_max_weight );
+		update_post_meta( $post_id, 'wcpo_href', 			$wcpo_href );
+		
+		// Чистим кэш
+		$this->clearCache();
 	}
 	
 	/* -------------- Данные в таблице Post Manage Page -------------- */
@@ -427,7 +469,7 @@ class WCPO_OfficeList
 
 	/**
 	 * Сортировка в колонке 
-	 * @param ьшчув $vars	Код колонки
+	 * @param mixed $vars	Код колонки
 	 * @param string $post_id	ID записи
 	 * @retun mixed
 	 */	
@@ -466,7 +508,10 @@ class WCPO_OfficeList
 	 */
 	public function getCities( $type='' ) 
 	{
-		// TODO: Сделать кэширование
+		/* Проверка кэша
+		$cities = get_transient( 'wcpo_cities' );
+		if ( $cities )
+			return $cities; */
 		
 		/* Вариант 1. Быстрый, но не учитывает тип 
 		global $wpdb;
@@ -517,6 +562,8 @@ class WCPO_OfficeList
 		
 		// Restore original Post Data
 		wp_reset_postdata();
+		
+		set_transient( 'wcpo_cities', $cities, WCPO_CACHE_TIMEOUT );
 
 		return $cities;
 	}
@@ -529,8 +576,13 @@ class WCPO_OfficeList
 	 */
 	public function getCitiesData( $type='' ) 
 	{
-		// TODO: Сделать кэширование
+		/* кэширование
+		$cities = get_transient( 'wcpo_cities_data' );
+		if ( $cities )
+			return $cities; */
+		
 		$cities = array();
+		
 	
 		/**
 		 * Параметры запроса
@@ -570,6 +622,7 @@ class WCPO_OfficeList
 					$cities[$city] = array(
 						'wcpo_delivery_period' 	=> get_post_meta( $post_id, 'wcpo_delivery_period', true ),
 						'wcpo_max_weight' 		=> get_post_meta( $post_id, 'wcpo_max_weight', true ),
+						'wcpo_href' 			=> get_post_meta( $post_id, 'wcpo_href', true ),
 					);
 				}
 			}
@@ -578,6 +631,8 @@ class WCPO_OfficeList
 		// Restore original Post Data
 		wp_reset_postdata();
 
+		set_transient( 'wcpo_cities_data', $cities, WCPO_CACHE_TIMEOUT );
+		
 		return $cities;
 	}	
 	
@@ -589,7 +644,10 @@ class WCPO_OfficeList
 	 */
 	public function getOfficeTypes() 
 	{
-		// TODO: Сделать кэширование
+		// кэширование
+		$offceTypes = get_transient( 'wcpo_office_types' );
+		if ( $offceTypes )
+			return $offceTypes;
 		
 		// Типы офисов	
 		$offceTypes = array();
@@ -607,6 +665,8 @@ class WCPO_OfficeList
 			$offceTypes = $term_query->terms;
 		}
 		
+		set_transient( 'wcpo_office_types', $offceTypes, WCPO_CACHE_TIMEOUT );
+		
 		return $offceTypes;
 	}	
 	
@@ -619,7 +679,10 @@ class WCPO_OfficeList
 	 */
 	public function getOffices( $type='', $city='' ) 
 	{
-		// TODO: Сделать кэширование
+		/* кэширование
+		$offices = get_transient( 'wcpo_offices' );
+		if ( $offices )
+			return $offices; */
 		
 		$offices = array();
 
@@ -671,12 +734,15 @@ class WCPO_OfficeList
 					'wcpo_email'			=> get_post_meta( $post_id, 'wcpo_email', true ),
 					'wcpo_terminal'			=> get_post_meta( $post_id, 'wcpo_terminal', true ),
 					'wcpo_max_weight'		=> get_post_meta( $post_id, 'wcpo_max_weight', true ),
+					'wcpo_href'				=> get_post_meta( $post_id, 'wcpo_href', true ),
 				);
 			}
 		}
 		
 		// Restore original Post Data
 		wp_reset_postdata();		
+		
+		set_transient( 'wcpo_offices', $offices, WCPO_CACHE_TIMEOUT );
 		
 		// Возвращаем результат
 		return $offices;
