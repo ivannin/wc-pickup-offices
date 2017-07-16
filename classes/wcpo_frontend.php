@@ -53,7 +53,7 @@ class WCPO_FrontEnd
 			'title'		=>	'',					// Название, которое выводится заголовком H2
 			'type' 		=> 'pickup_office',		// Слаг таксономии "Тип пункта"
 			'city'		=>	'',					// Город, для которого следует вывести список
-			'cols'		=> 'wcpo_point_id,wcpo_city,wcpo_address,wcpo_open_hours,wcpo_phone,wcpo_terminal',
+			'cols'		=> 'wcpo_point_id,wcpo_city,wcpo_metro,wcpo_address,wcpo_open_hours,wcpo_phone,wcpo_terminal',
 			'col_title'	=> __( 'Point ID,City,Address,Open Hours,Phone,Terminal', WCPO_TEXT_DOMAIN ),
 		), $atts ) );
 		
@@ -67,6 +67,7 @@ class WCPO_FrontEnd
 		// Преобразуем список колонок и названий в массив
 		$cols 		= explode( ',', $cols );
 		$col_title 	= explode( ',', $col_title );
+	
 		
 		// Если поля указаны, делаем запрос объекту wcpo_officelist
 		if ( count( $cols ) && $cols[0] != '' )

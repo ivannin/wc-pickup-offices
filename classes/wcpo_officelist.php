@@ -673,9 +673,9 @@ class WCPO_OfficeList
 	/**
 	 * Возвращает список пунктов
 	 * 
-	 * @param string	$type	Слаг типа офиса, если пусто - вернём все
-	 * @param string	$city	Город, из которого возвращаются пункты
-	 * @retun mixed				Список пунктов в виде ассоциативного массива array( 'ID' => array(...) )
+	 * @param string	$type		Слаг типа офиса, если пусто - вернём все
+	 * @param string	$city		Город, из которого возвращаются пункты
+	 * @retun mixed					Список пунктов в виде ассоциативного массива array( 'ID' => array(...) )
 	 */
 	public function getOffices( $type='', $city='' ) 
 	{
@@ -686,15 +686,37 @@ class WCPO_OfficeList
 		
 		$offices = array();
 
+		/* Параметры запроса
+		$args = array (
+			'post_type'		=> array( self::CPT ),
+			'post_status'	=> array( 'publish' ),
+			'meta_key' 		=> $orderby,
+			'orderby'		=> 'meta_value',
+			'order'			=> 'ASC',			
+			'posts_per_page'=> -1,			
+		); */
+		
 		// Параметры запроса
 		$args = array (
 			'post_type'		=> array( self::CPT ),
 			'post_status'	=> array( 'publish' ),
-			'meta_key' 		=> 'wcpo_city',
-			'orderby'		=> 'meta_value',
-			'order'			=> 'ASC',			
+			/*Сортировка по городу, потом по метро */
+			'meta_query' => array(
+				'relation' => 'AND',
+				'city_clause' => array(
+					'key' => 'wcpo_city',
+					'compare' => 'EXISTS',
+				),
+				'address_clause' => array(
+					'key' => 'wcpo_metro',
+					'compare' => 'EXISTS',
+				), 
+			),			
+			'orderby' => array( 
+					'city_clause' 		=> 'ASC',
+					'address_clause' 	=> 'ASC'),	
 			'posts_per_page'=> -1,			
-		);
+		);		
 		
 		// Если указан город, добавляем его к запросу
 		if ( ! empty( $city ) )
